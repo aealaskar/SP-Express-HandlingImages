@@ -12,7 +12,7 @@ exports.fetchProduct = async (productId, next) => {
 
 exports.productListFetch = async (req, res, next) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find().populate("shop");
     return res.json(products);
   } catch (error) {
     next(error);
