@@ -1,5 +1,6 @@
 const express = require("express");
 const productRoutes = require("./apis/products/routes");
+const categoriesRoutes = require("./apis/products/categories/routers");
 const connectDB = require("./db/database");
 const morgan = require("morgan");
 const logger = require("./middleware/logger");
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
 app.use(cors());
 // Routes
 app.use("/api/products", productRoutes);
+app.use("/api/categories", categoriesRoutes);
 app.use("/media", express.static(path.join(__dirname, "media")));
 
 app.use((req, res, next) => {
