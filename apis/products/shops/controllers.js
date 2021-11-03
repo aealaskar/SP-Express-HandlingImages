@@ -22,6 +22,7 @@ exports.createShop = async (req, res) => {
 
 exports.productCreate = async (req, res) => {
   try {
+    console.log(req.body);
     if (req.file) {
       req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
     }
