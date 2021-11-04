@@ -13,6 +13,10 @@ exports.fetchShops = async (req, res) => {
 
 exports.createShop = async (req, res) => {
   try {
+    if (req.file) {
+      req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
+    }
+    req.body.owner = req.user._id;
     const newShop = await Shop.create(req.body);
     res.status(201).json(newShop);
   } catch (error) {
@@ -20,9 +24,11 @@ exports.createShop = async (req, res) => {
   }
 };
 
-exports.productCreate = async (req, res) => {
+exports.productCreate = async (req, res, next) => {
   try {
-    console.log(req.body);
+    if (!req.user._id.equals(req.shop.owner._id)) {
+      return next({ status: 401, message: "You're not the owner" });
+    }
     if (req.file) {
       req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
     }
@@ -35,6 +41,6 @@ exports.productCreate = async (req, res) => {
     );
     return res.status(201).json(newProduct);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };

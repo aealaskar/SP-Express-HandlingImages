@@ -13,7 +13,7 @@ const path = require("path");
 const passport = require("passport");
 
 connectDB();
-const { localStrategy } = require("./middleware/passport");
+const { localStrategy, jwtStrategy } = require("./middleware/passport");
 // Middleware
 app.use(express.json());
 app.use(morgan("dev"));
@@ -27,6 +27,7 @@ app.use(cors());
 
 app.use(passport.initialize());
 passport.use(localStrategy);
+passport.use(jwtStrategy);
 // Routes
 app.use("/api/products", productRoutes);
 app.use("/api/shops", shopsRoutes);

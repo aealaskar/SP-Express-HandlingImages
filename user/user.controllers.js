@@ -3,6 +3,16 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config/keys");
 
+const generateToken = (user) => {
+  const payLoad = {
+    _id: user._id,
+    userName: user.userName,
+  };
+
+  const token = jwt.sign(payLoad, JWT_SECRET, { expiresIn: "1h" });
+  return token;
+};
+
 exports.signUp = async (req, res, next) => {
   try {
     const saltRounds = 10;
@@ -11,12 +21,7 @@ exports.signUp = async (req, res, next) => {
 
     const newUser = await User.create(req.body);
 
-    const payLoad = {
-      _id: newUser._id,
-      userName: newUser.userName,
-    };
-
-    const token = jwt.sign(payLoad, JWT_SECRET, { expiresIn: "1h" });
+    const token = generateToken(newUser);
 
     res.status(201).json({ token });
   } catch (error) {
@@ -25,8 +30,6 @@ exports.signUp = async (req, res, next) => {
 };
 
 exports.signIn = async (req, res, next) => {
-  try {
-  } catch (error) {
-    next(error);
-  }
+  const token = generateToken(req.user);
+  res.json({ token });
 };
