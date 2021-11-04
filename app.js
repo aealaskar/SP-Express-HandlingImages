@@ -10,9 +10,10 @@ const cors = require("cors");
 // const media = require("./media");
 const app = express();
 const path = require("path");
+const passport = require("passport");
 
 connectDB();
-
+const { localStrategy } = require("./middleware/passport");
 // Middleware
 app.use(express.json());
 app.use(morgan("dev"));
@@ -23,6 +24,9 @@ app.use((req, res, next) => {
   else next();
 });
 app.use(cors());
+
+app.use(passport.initialize());
+passport.use(localStrategy);
 // Routes
 app.use("/api/products", productRoutes);
 app.use("/api/shops", shopsRoutes);
