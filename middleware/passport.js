@@ -36,7 +36,9 @@ exports.localStrategy = new LocalStrategy(async (username, password, done) => {
 exports.jwtStrategy = new JWTStrategy(
   { jwtFromRequest: fromAuthHeaderAsBearerToken(), secretOrKey: JWT_SECRET },
   async (payLoad, done) => {
-    if (Date.now() > payLoad.exp) {
+    if (Date.now() > payLoad.exp * 1000) {
+      console.log(Date.now());
+      console.log(payLoad);
       return done(null, false);
     }
     try {

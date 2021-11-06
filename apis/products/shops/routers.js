@@ -5,6 +5,17 @@ const upload = require("../../../middleware/multer");
 
 const { fetchShops, productCreate, createShop } = require("./controllers");
 
+//middleware
+router.param("shopId", async (req, res, next, shopId) => {
+  const shop = await fetchShops(shopId, next);
+  if (shop) {
+    req.shop = shop;
+    next();
+  } else {
+    next({ status: 404, message: "Shop not found!" });
+  }
+});
+
 router.get("/", fetchShops);
 
 router.post(

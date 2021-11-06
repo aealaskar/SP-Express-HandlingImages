@@ -6,7 +6,7 @@ const { JWT_SECRET } = require("../config/keys");
 const generateToken = (user) => {
   const payLoad = {
     _id: user._id,
-    userName: user.userName,
+    username: user.username,
   };
 
   const token = jwt.sign(payLoad, JWT_SECRET, { expiresIn: "1h" });
